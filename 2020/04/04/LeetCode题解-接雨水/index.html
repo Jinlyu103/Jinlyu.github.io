@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Jin Lyu,lyujinyu@gmail.com"><title>LeetCode题解-接雨水 · JinLyu</title><meta name="description" content="今天打卡题目为接雨水，想起来前两天做过的 “盛最多水的容器” 这道题，先回忆一下：
+
+盛最多水的容器 [中等]
+题目描述：
+给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)"><meta name="keywords" content="Hexo,HTML,CSS,android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/logo@2x.png" type="image/x-icon"><link rel="stylesheet" href="../../../../css/style.css"><link rel="stylesheet" href="../../../../css/blog_basic.css"><link rel="stylesheet" href="../../../../css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="../../../../images/img1.jpg" style="width:127px;"><h3 title=""><a href="/">JinLyu</a></h3><div class="description"><p>Nothing lasts forever but love will.</p></div></div></div><ul class="social-links"><li><a href="http://github.com/Jinlyu103" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a href="https://www.caicai.me" target="_blank" rel="noopener"> CaiCai </a><span>&</span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/logo.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>LeetCode题解-接雨水</a></h3></div><div class="post-content"><p>今天打卡题目为接雨水，想起来前两天做过的 “盛最多水的容器” 这道题，先回忆一下：</p>
+<ol start="11">
+<li><p>盛最多水的容器 [<strong>中等</strong>]</p>
+<p>题目描述：</p>
+<p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
+<p>说明：你不能倾斜容器，且 n 的值至少为 2。</p>
+<img src="/2020/04/04/LeetCode%E9%A2%98%E8%A7%A3-%E6%8E%A5%E9%9B%A8%E6%B0%B4/question_11.jpg" alt="question_11" style="zoom:Infinity%;">
+
+<p>图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49.</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入:[1,8,6,2,5,4,8,3,7]</span><br><span class="line">输出：49</span><br></pre></td></tr></table></figure>
+
+<p>做这道题之前需要明确的一点是，盛水的容量相当于两根柱子之间形成的面积，而这个面积取决于较短的那根柱子的高度和柱子之间的距离。具体思路是：</p>
+<p>设置两个指针，i指向头，j指向尾，计算两个柱子之间形成的面积，最大面积为该面积与之前求得的最大面积之间的最大值。每次移动较短的那根柱子，循环条件为i &lt; j。</p>
+<p>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxArea</span><span class="params">(self, height: List[int])</span> -&gt; int:</span></span><br><span class="line">        n = len(height)</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        j = n<span class="number">-1</span></span><br><span class="line">        maxS = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; j:</span><br><span class="line">            s = min(height[i], height[j]) * (j-i)</span><br><span class="line">            maxS = max(maxS,s)</span><br><span class="line">            <span class="keyword">if</span> height[i] &lt;= height[j]:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> maxS</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<pre><code>42. 接雨水 [**困难**]
+
+    题目描述：
+
+    给定 *n* 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+    ![rainwatertrap](./LeetCode题解-接雨水/rainwatertrap.png)
+
+    上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 感谢 Marcos 贡献此图。
+
+    示例：
+
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入： [0,1,0,2,1,0,1,3,2,1,2,1] </span><br><span class="line">输出：6</span><br></pre></td></tr></table></figure>
+
+    首先，能接雨水，那么数组的长度至少为3；
+
+    两根柱子能够承接雨水，就要求这三个柱子形成的空间为凹的状态。定义两个指针分别为，左指针left = 0，右指针right = n-1，从左往右遍历到的最大高度记为letf_max，从右往左遍历到的最大高度记为right_max。
+
+    在一次循环中，如果左边的高度小于右边的高度，更新left：比较height[left]和left_max的大小，如果大于或者等于，更新left_max值；否则，说明当前的柱子比之前的某根柱子矮，将left_max-height[left]的值累加到ans中（这里隐含着右边的柱子高于left_max)。最后 left += 1；
+
+    否则，更新right：比较height[right] 和 right_max的大小，如果大于或者等于，更新right_max的值；否则，说明当前的柱子比右边的某根柱子矮，将right_max - height[right]累加到ans中（同样，这里隐含左边柱子的高度大于等于right_max)。
+
+    代码如下：
+
+    <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trap</span><span class="params">(self, height: List[int])</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> len(height) &lt; <span class="number">3</span>: <span class="comment">#至少要有三根柱子</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        right = len(height) - <span class="number">1</span></span><br><span class="line">        left_max = <span class="number">0</span></span><br><span class="line">        right_max = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> left &lt; right:</span><br><span class="line">            <span class="keyword">if</span> height[left] &lt; height[right]:</span><br><span class="line">                <span class="keyword">if</span> height[left] &gt;= left_max:</span><br><span class="line">                    left_max = height[left]</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    ans += left_max - height[left]</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> height[right] &gt;= right_max:</span><br><span class="line">                    right_max = height</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    ans += right_max - height[right]</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/container-with-most-water
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</code></pre></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-04-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LeetCode题解/" title="LeetCode题解">LeetCode题解 </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f=' target="_blank" rel="noopener"http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,http://yoursite.com/2020/04/04/LeetCode题解-接雨水/,JinLyu,LeetCode题解-接雨水,;" target="_blank" rel="noopener"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="../../03/LeetCode%E9%A2%98%E8%A7%A3-912%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84/" title="LeetCode题解--912排序数组">Próximo post</a></li></ul></div></div></div></div></div><script src="../../../../js/jquery.js"></script><script src="../../../../js/jquery-migrate-1.2.1.min.js"></script><script src="../../../../js/jquery.appear.js"></script></body></html>
